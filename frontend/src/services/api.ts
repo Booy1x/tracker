@@ -62,7 +62,6 @@ export interface Good {
   unit: string;
   purchase_date: string;
   expiry_date: string;
-  location: string;
   notes?: string;
   created_at?: string;
   updated_at?: string;

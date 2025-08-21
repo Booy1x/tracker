@@ -15,8 +15,7 @@ export interface Good {
   unit: string;
   purchase_date: string;
   expiry_date: string;
-  location: string;
-  notes?: string;
+  notes: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -68,7 +67,6 @@ export interface PaginatedResponse<T> {
 export interface SearchParams {
   q?: string;
   category?: string;
-  location?: string;
   sort_by?: string;
   sort_order?: 'asc' | 'desc';
   page?: number;

@@ -91,7 +91,8 @@ router.get("/:id", async (req, res) => {
 // POST /api/goods - 添加新物品
 router.post("/", async (req, res) => {
   try {
-    const { name, purchase_date, expiry_date, quantity, notes } = req.body;
+    const { name, purchase_date, expiry_date, quantity, notes, category } =
+      req.body;
 
     // 基础数据验证
     if (!name || typeof name !== "string" || name.trim().length === 0) {
@@ -145,12 +146,28 @@ router.post("/", async (req, res) => {
       }
     }
 
+    // 分类验证
+    if (category && typeof category !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "分类必须是字符串",
+      });
+    }
+
+    if (category && category.length > 100) {
+      return res.status(400).json({
+        success: false,
+        message: "分类不能超过100个字符",
+      });
+    }
+
     // 创建新物品
     const newItem = {
       name: name.trim(),
       purchase_date: purchase_date || null,
       expiry_date: expiry_date || null,
       quantity: quantity || 1,
+      category: category ? category.trim() : null,
       notes: notes ? notes.trim() : null,
       created_at: new Date().toISOString(),
     };

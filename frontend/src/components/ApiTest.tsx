@@ -29,7 +29,6 @@ const ApiTest: React.FC = () => {
         quantity: 5,
         unit: '个',
         expiry_date: '2024-12-31',
-        location: '冰箱',
         notes: 'API测试创建',
       };
       const created = await goodsApi.createGood(newGood);
@@ -93,7 +92,7 @@ const ApiTest: React.FC = () => {
             {goods.map((good) => (
               <li key={good.id}>
                 {good.name} - {good.category} - {good.quantity}
-                {good.unit} - {good.location}
+                {good.unit}
                 {good.notes && <span> ({good.notes})</span>}
               </li>
             ))}

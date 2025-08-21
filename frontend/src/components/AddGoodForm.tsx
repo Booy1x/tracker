@@ -38,7 +38,6 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
       unit: values.unit,
       purchaseDate,
       expiryDate,
-      location: values.location || '默认位置',
       notes: values.notes,
     };
 
@@ -49,7 +48,7 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
   return (
     <Card
       style={{
-        maxWidth: 600,
+        maxWidth: '100%',
         margin: '0 auto',
         borderRadius: 12,
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
@@ -81,15 +80,19 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
         <Form.Item
           label="分类"
           name="category"
-          rules={[{ required: true, message: '请选择分类' }]}
+          rules={[{ required: true, message: '请选择或输入分类' }]}
         >
-          <Select placeholder="请选择分类" size="large">
-            {COMMON_CATEGORIES.map((category) => (
-              <Select.Option key={category} value={category}>
-                {category}
-              </Select.Option>
-            ))}
-          </Select>
+          <Select
+            placeholder="请选择或输入分类"
+            size="large"
+            showSearch
+            mode="tags"
+            tokenSeparators={[',']}
+            options={COMMON_CATEGORIES.map((category) => ({
+              label: category,
+              value: category,
+            }))}
+          />
         </Form.Item>
 
         <Space.Compact style={{ width: '100%' }}>
@@ -97,7 +100,7 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
             label="数量"
             name="quantity"
             rules={[{ required: true, message: '请输入数量' }]}
-            style={{ width: '70%' }}
+            style={{ width: '60%' }}
           >
             <Input
               type="number"
@@ -112,7 +115,7 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
             label="单位"
             name="unit"
             rules={[{ required: true, message: '请选择单位' }]}
-            style={{ width: '30%' }}
+            style={{ width: '40%' }}
           >
             <Select placeholder="单位" size="large">
               {COMMON_UNITS.map((unit) => (
@@ -124,28 +127,20 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
           </Form.Item>
         </Space.Compact>
 
-        <Space.Compact style={{ width: '100%' }}>
-          <Form.Item
-            label="购买日期"
-            name="purchaseDate"
-            rules={[{ required: true, message: '请选择购买日期' }]}
-            style={{ width: '50%' }}
-          >
-            <DatePicker style={{ width: '100%' }} size="large" />
-          </Form.Item>
+        <Form.Item
+          label="购买日期"
+          name="purchaseDate"
+          rules={[{ required: true, message: '请选择购买日期' }]}
+        >
+          <DatePicker style={{ width: '100%' }} size="large" />
+        </Form.Item>
 
-          <Form.Item
-            label="保质期（天）"
-            name="shelfLifeDays"
-            rules={[{ required: true, message: '请输入保质期' }]}
-            style={{ width: '50%' }}
-          >
-            <Input type="number" min={1} placeholder="天数" size="large" />
-          </Form.Item>
-        </Space.Compact>
-
-        <Form.Item label="位置" name="location" initialValue="默认位置">
-          <Input placeholder="例如：冰箱、厨房" size="large" />
+        <Form.Item
+          label="保质期（天）"
+          name="shelfLifeDays"
+          rules={[{ required: true, message: '请输入保质期' }]}
+        >
+          <Input type="number" min={1} placeholder="天数" size="large" />
         </Form.Item>
 
         <Form.Item label="备注" name="notes">

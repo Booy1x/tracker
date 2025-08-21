@@ -12,17 +12,33 @@ import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import GoodList from '../components/GoodList';
 import AddGoodForm from '../components/AddGoodForm';
 import { goodsApi } from '../services/api';
-import type { Good as ApiGood } from '../types/api.types';
+import type { Good as ApiGood } from '../services/api';
 import type { Good, CreateGoodRequest } from '../types/good';
+import { COMMON_CATEGORIES } from '../types/good';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 
 export default function GoodsManagement() {
   const [goods, setGoods] = useState<Good[]>([]);
+  const [filteredGoods, setFilteredGoods] = useState<Good[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | 'all'>(
+    'all'
+  );
+
+  // 根据选中的类别筛选物品
+  useEffect(() => {
+    if (selectedCategory === 'all') {
+      setFilteredGoods(goods);
+    } else {
+      setFilteredGoods(
+        goods.filter((good) => good.category === selectedCategory)
+      );
+    }
+  }, [goods, selectedCategory]);
 
   // 转换API数据到本地类型
   const convertApiGoodToLocal = (apiGood: ApiGood): Good => {
@@ -41,7 +57,6 @@ export default function GoodsManagement() {
       unit: apiGood.unit,
       notes: apiGood.notes,
       category: apiGood.category,
-      location: apiGood.location,
       createdAt: apiGood.created_at || new Date().toISOString(),
       updatedAt: apiGood.updated_at || new Date().toISOString(),
       daysRemaining: Math.max(daysRemaining, 0),
@@ -81,7 +96,6 @@ export default function GoodsManagement() {
         unit: newGoodData.unit,
         purchase_date: newGoodData.purchaseDate,
         expiry_date: newGoodData.expiryDate,
-        location: newGoodData.location || '默认位置',
         notes: newGoodData.notes,
       });
 
@@ -118,7 +132,7 @@ export default function GoodsManagement() {
       <Header
         style={{
           backgroundColor: '#FFFDF7',
-          padding: '16px 24px',
+          padding: '8px 12px',
           borderBottom: '1px solid #f0f0f0',
           height: 'auto',
           lineHeight: 'normal',
@@ -132,7 +146,7 @@ export default function GoodsManagement() {
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: 16,
+            gap: 12,
           }}
         >
           <div>
@@ -140,7 +154,7 @@ export default function GoodsManagement() {
               level={1}
               style={{
                 margin: 0,
-                fontSize: 'clamp(24px, 4vw, 32px)',
+                fontSize: 'clamp(20px, 4vw, 28px)',
                 fontWeight: 'bold',
                 color: '#333333',
                 lineHeight: 1.2,
@@ -150,17 +164,18 @@ export default function GoodsManagement() {
             </Title>
             <Text
               type="secondary"
-              style={{ fontSize: 'clamp(14px, 2vw, 16px)' }}
+              style={{ fontSize: 'clamp(12px, 2vw, 14px)' }}
             >
               智能保质期管理，让新鲜更持久
             </Text>
           </div>
-          <Space wrap>
+          <Space wrap size="small">
             <Button
               type="default"
               icon={<ReloadOutlined />}
               onClick={loadGoods}
               loading={loading}
+              size="middle"
             >
               刷新
             </Button>
@@ -168,8 +183,8 @@ export default function GoodsManagement() {
               type="primary"
               icon={<PlusOutlined />}
               onClick={() => setShowAddForm(true)}
-              size="large"
-              style={{ borderRadius: 24 }}
+              size="middle"
+              style={{ borderRadius: 20 }}
             >
               添加物品
             </Button>
@@ -177,12 +192,12 @@ export default function GoodsManagement() {
         </div>
       </Header>
 
-      <Content style={{ padding: '16px' }}>
+      <Content style={{ padding: '12px' }}>
         <div
           style={{
             maxWidth: '100%',
             margin: '0 auto',
-            padding: '0 8px',
+            padding: '0 0 24px 0',
           }}
         >
           {error && (
@@ -206,7 +221,8 @@ export default function GoodsManagement() {
               style={{
                 maxWidth: '100%',
                 margin: '0 auto',
-                padding: '0 8px',
+                padding: '0',
+                margin: '0 -8px',
               }}
             >
               <Title
@@ -226,18 +242,94 @@ export default function GoodsManagement() {
             </div>
           ) : (
             <div>
-              <Title
-                level={2}
-                style={{
-                  marginBottom: 24,
-                  textAlign: 'center',
-                  fontSize: 'clamp(20px, 3vw, 28px)',
-                }}
-              >
-                我的物品 ({goods.length})
-              </Title>
+              <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                <Title
+                  level={2}
+                  style={{
+                    fontSize: 'clamp(20px, 3vw, 28px)',
+                    marginBottom: 16,
+                  }}
+                >
+                  物品列表
+                </Title>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexWrap: 'wrap',
+                    gap: '12px',
+                    marginBottom: '12px',
+                    padding: '0 4px',
+                  }}
+                >
+                  <div
+                    onClick={() => setSelectedCategory('all')}
+                    style={{
+                      cursor: 'pointer',
+                      paddingBottom: '8px',
+                      borderBottom:
+                        selectedCategory === 'all'
+                          ? '3px solid #8EC560'
+                          : '3px solid transparent',
+                      flex: '1 1 auto',
+                      minWidth: '60px',
+                      maxWidth: '120px',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: '14px',
+                        fontWeight:
+                          selectedCategory === 'all' ? 'bold' : 'normal',
+                        color:
+                          selectedCategory === 'all'
+                            ? '#8EC560'
+                            : 'rgba(0, 0, 0, 0.65)',
+                      }}
+                    >
+                      全部 ({goods.length})
+                    </Text>
+                  </div>
+                  {COMMON_CATEGORIES.map((category) => (
+                    <div
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      style={{
+                        cursor: 'pointer',
+                        paddingBottom: '8px',
+                        borderBottom:
+                          selectedCategory === category
+                            ? '3px solid #8EC560'
+                            : '3px solid transparent',
+                        flex: '1 1 auto',
+                        minWidth: '60px',
+                        maxWidth: '120px',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: '14px',
+                          fontWeight:
+                            selectedCategory === category ? 'bold' : 'normal',
+                          color:
+                            selectedCategory === category
+                              ? '#8EC560'
+                              : 'rgba(0, 0, 0, 0.65)',
+                        }}
+                      >
+                        {category} (
+                        {
+                          goods.filter((good) => good.category === category)
+                            .length
+                        }
+                        )
+                      </Text>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <GoodList
-                goods={goods}
+                goods={filteredGoods}
                 loading={loading}
                 onDelete={handleDeleteGood}
               />
@@ -251,6 +343,10 @@ export default function GoodsManagement() {
         type="primary"
         onClick={() => setShowAddForm(true)}
         tooltip="添加物品"
+        style={{
+          right: 24,
+          bottom: 24,
+        }}
       />
     </Layout>
   );
