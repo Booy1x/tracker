@@ -1,10 +1,6 @@
 import React from 'react';
-import { Card, Empty, Spin, Typography, Button, Space, Row, Col } from 'antd';
-import {
-  DeleteOutlined,
-  ShoppingOutlined,
-  CalendarOutlined,
-} from '@ant-design/icons';
+import { Card, Empty, Typography, Button, Space, Row, Col, Tag } from 'antd';
+import { DeleteOutlined, CalendarOutlined } from '@ant-design/icons';
 import type { Good } from '../types/good';
 import {
   GOOD_STATUS_CONFIG,
@@ -23,26 +19,25 @@ interface GoodListProps {
 const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px 16px' }}>
-        <Spin size="large" />
+      <div style={{ textAlign: 'center', padding: '50px' }}>
+        <Card
+          loading={true}
+          style={{ width: '100%', maxWidth: 300, margin: '0 auto' }}
+        >
+          <div style={{ height: 120 }} />
+        </Card>
       </div>
     );
   }
 
   if (goods.length === 0) {
     return (
-      <Empty
-        image={<ShoppingOutlined style={{ fontSize: 64, color: '#8EC560' }} />}
-        description={
-          <div>
-            <Title level={4} style={{ color: '#333', marginBottom: 8 }}>
-              暂无物品
-            </Title>
-            <Text type="secondary">添加第一个物品，开始管理您的食品保鲜</Text>
-          </div>
-        }
-        style={{ padding: '40px 16px' }}
-      />
+      <div style={{ textAlign: 'center', padding: '40px 16px' }}>
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="暂无物品，快去添加吧！"
+        />
+      </div>
     );
   }
 
@@ -57,27 +52,34 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
               <Card
                 hoverable
                 styles={{
-                  body: { padding: '12px', height: '100%' },
+                  body: {
+                    padding: '12px',
+                    height: '100%',
+                    minHeight: '120px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  },
                 }}
                 style={{
                   borderRadius: 8,
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
                   transition: 'all 0.3s ease',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   backgroundColor: statusConfig.bgColor,
                   border: `2px solid ${statusConfig.color}`,
+                  cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    '0 4px 12px rgba(0, 0, 0, 0.12)';
                   e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow =
+                    '0 4px 12px rgba(0, 0, 0, 0.15)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    '0 2px 8px rgba(0, 0, 0, 0.08)';
                   e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow =
+                    '0 2px 8px rgba(0, 0, 0, 0.1)';
                 }}
               >
                 <div
@@ -88,7 +90,14 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
                     position: 'relative',
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: 8,
+                    }}
+                  >
                     <Title
                       level={2}
                       style={{
@@ -100,28 +109,43 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
                         color: statusConfig.color,
                         flex: 1,
                         paddingRight: 8,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       }}
                     >
                       {good.name}
                     </Title>
-                    <div
+                    <Tag
+                      color={statusConfig.color}
                       style={{
                         fontSize: 12,
                         fontWeight: 600,
-                        color: statusConfig.color,
+                        margin: 0,
                         whiteSpace: 'nowrap',
                         flexShrink: 0,
                         alignSelf: 'center',
+                        borderRadius: 4,
+                        padding: '2px 6px',
                       }}
                     >
                       {formatDaysRemaining(good.daysRemaining)}
-                    </div>
+                    </Tag>
                   </div>
 
                   {good.notes && (
                     <Paragraph
-                      ellipsis={{ rows: 2, expandable: false }}
-                      style={{ fontSize: 12, color: '#666', marginBottom: 8 }}
+                      style={{
+                        fontSize: 12,
+                        color: '#666',
+                        margin: 0,
+                        marginTop: 4,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                      className="good-notes"
                     >
                       {good.notes}
                     </Paragraph>
@@ -136,7 +160,17 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
                     }}
                   >
                     <Space size="small" style={{ alignItems: 'center' }}>
-                      <CalendarOutlined style={{ color: '#999', fontSize: 10 }} />
+                      <CalendarOutlined
+                        style={{
+                          color:
+                            good.daysRemaining <= 0
+                              ? '#ff4d4f'
+                              : good.daysRemaining <= 7
+                                ? '#faad14'
+                                : '#52c41a',
+                          fontSize: 10,
+                        }}
+                      />
                       <Text type="secondary" style={{ fontSize: 10 }}>
                         过期: {formatDate(good.expiryDate)}
                       </Text>
