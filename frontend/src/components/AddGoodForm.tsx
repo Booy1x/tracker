@@ -1,4 +1,3 @@
-import { useForm } from 'react-hook-form';
 import {
   Form,
   Input,
@@ -9,11 +8,11 @@ import {
   Card,
   Typography,
 } from 'antd';
-import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import type { CreateGoodRequest } from '../types/good';
 import { COMMON_CATEGORIES, COMMON_UNITS } from '../types/good';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { TextArea } = Input;
 
 interface AddGoodFormProps {

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Card,
-  Empty,
-  Spin,
-  Typography,
-  Button,
-  Space,
-  Row,
-  Col,
-} from 'antd';
+import { Card, Empty, Spin, Typography, Button, Space, Row, Col } from 'antd';
 import {
   DeleteOutlined,
   ShoppingOutlined,
@@ -66,7 +57,7 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
               <Card
                 hoverable
                 styles={{
-                  body: { padding: '12px' },
+                  body: { padding: '12px', height: '100%' },
                 }}
                 style={{
                   borderRadius: 8,
@@ -92,89 +83,81 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
                 <div
                   style={{
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    flexWrap: 'wrap',
-                    gap: '12px',
-                    flex: 1,
+                    flexDirection: 'column',
+                    height: '100%',
                     position: 'relative',
                   }}
                 >
-                  <div style={{ flex: 1, minWidth: 150 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                     <Title
                       level={2}
                       style={{
-                        margin: '0 0 8px 0',
+                        margin: 0,
                         fontSize: 'clamp(16px, 3vw, 20px)',
                         fontWeight: 600,
                         lineHeight: 1.3,
                         textAlign: 'left',
                         color: statusConfig.color,
+                        flex: 1,
+                        paddingRight: 8,
                       }}
                     >
                       {good.name}
                     </Title>
-
-
-                    {good.notes && (
-                      <Paragraph
-                        ellipsis={{ rows: 2, expandable: false }}
-                        style={{ fontSize: 12, color: '#666', marginBottom: 8 }}
-                      >
-                        {good.notes}
-                      </Paragraph>
-                    )}
-
-                    <Space
-                      size="small"
-                      style={{ marginTop: 'auto', flexWrap: 'wrap' }}
-                    >
-                      <CalendarOutlined
-                        style={{ color: '#999', fontSize: 10 }}
-                      />
-                      <Text type="secondary" style={{ fontSize: 10 }}>
-                        过期: {formatDate(good.expiryDate)}
-                      </Text>
-                    </Space>
-                  </div>
-
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      textAlign: 'right',
-                      minWidth: 80,
-                    }}
-                  >
                     <div
                       style={{
                         fontSize: 12,
                         fontWeight: 600,
                         color: statusConfig.color,
-                        marginTop: 4,
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                        alignSelf: 'center',
                       }}
                     >
                       {formatDaysRemaining(good.daysRemaining)}
                     </div>
                   </div>
 
-                  {onDelete && (
-                    <Button
-                      type="text"
-                      danger
-                      icon={<DeleteOutlined />}
-                      shape="circle"
-                      size="middle"
-                      style={{ position: 'absolute', bottom: 0, right: 0 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (window.confirm('确定要删除这个物品吗？')) {
-                          onDelete(good.id);
-                        }
-                      }}
-                    />
+                  {good.notes && (
+                    <Paragraph
+                      ellipsis={{ rows: 2, expandable: false }}
+                      style={{ fontSize: 12, color: '#666', marginBottom: 8 }}
+                    >
+                      {good.notes}
+                    </Paragraph>
                   )}
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginTop: 'auto',
+                    }}
+                  >
+                    <Space size="small" style={{ alignItems: 'center' }}>
+                      <CalendarOutlined style={{ color: '#999', fontSize: 10 }} />
+                      <Text type="secondary" style={{ fontSize: 10 }}>
+                        过期: {formatDate(good.expiryDate)}
+                      </Text>
+                    </Space>
+
+                    {onDelete && (
+                      <Button
+                        type="text"
+                        danger
+                        icon={<DeleteOutlined />}
+                        shape="circle"
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (window.confirm('确定要删除这个物品吗？')) {
+                            onDelete(good.id);
+                          }
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               </Card>
             </Col>
