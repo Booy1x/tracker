@@ -3,7 +3,6 @@ import {
   Card,
   Empty,
   Spin,
-  Tag,
   Typography,
   Button,
   Space,
@@ -76,6 +75,8 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
+                  backgroundColor: statusConfig.bgColor,
+                  border: `2px solid ${statusConfig.color}`,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow =
@@ -108,6 +109,7 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
                         fontWeight: 600,
                         lineHeight: 1.3,
                         textAlign: 'left',
+                        color: statusConfig.color,
                       }}
                     >
                       {good.name}
