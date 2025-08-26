@@ -99,7 +99,7 @@ const GoodList: React.FC<GoodListProps> = ({ goods, loading, onDelete }) => {
                     }}
                   >
                     <Title
-                      level={2}
+                      level={3}
                       style={{
                         margin: 0,
                         fontSize: 'clamp(16px, 3vw, 20px)',

@@ -31,8 +31,8 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
       .format('YYYY-MM-DD');
 
     // 处理分类字段，确保是字符串
-    const category = Array.isArray(values.category) 
-      ? values.category[0] || '其他' 
+    const category = Array.isArray(values.category)
+      ? values.category[0] || '其他'
       : values.category || '其他';
 
     const submitData: CreateGoodRequest = {
@@ -56,7 +56,7 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
       }}
     >
-      <Title level={2} style={{ marginBottom: 24, textAlign: 'center' }}>
+      <Title level={3} style={{ marginBottom: 24, textAlign: 'center' }}>
         添加新物品
       </Title>
 
@@ -65,7 +65,7 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
         layout="vertical"
         onFinish={handleFormSubmit}
         initialValues={{
-          category: '其他',
+          category: ['其他'],
           shelfLifeDays: 7,
         }}
       >
@@ -94,8 +94,6 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
             }))}
           />
         </Form.Item>
-
-
 
         <Form.Item
           label="购买日期"

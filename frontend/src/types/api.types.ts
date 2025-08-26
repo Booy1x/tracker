@@ -11,8 +11,6 @@ export interface Good {
   id?: number;
   name: string;
   category: string;
-  quantity: number;
-  unit: string;
   purchase_date: string;
   expiry_date: string;
   notes: string;
@@ -20,32 +18,21 @@ export interface Good {
   updated_at?: string;
 }
 
-// 物品分类枚举
-export enum GoodCategory {
-  VEGETABLES = '蔬菜',
-  FRUITS = '水果',
-  MEAT = '肉类',
-  DAIRY = '乳制品',
-  GRAINS = '谷物',
-  CANNED = '罐头',
-  FROZEN = '冷冻食品',
-  BEVERAGES = '饮料',
-  SNACKS = '零食',
-  OTHER = '其他',
-}
+// 物品分类常量和类型
+export const GoodCategory = {
+  VEGETABLES: '蔬菜',
+  FRUITS: '水果',
+  MEAT: '肉类',
+  DAIRY: '乳制品',
+  GRAINS: '谷物',
+  CANNED: '罐头',
+  FROZEN: '冷冻食品',
+  BEVERAGES: '饮料',
+  SNACKS: '零食',
+  OTHER: '其他',
+} as const;
 
-// 物品单位枚举
-export enum GoodUnit {
-  KG = 'kg',
-  G = 'g',
-  L = 'L',
-  ML = 'ml',
-  PCS = '个',
-  BOX = '盒',
-  BOTTLE = '瓶',
-  BAG = '袋',
-  CAN = '罐',
-}
+export type GoodCategory = (typeof GoodCategory)[keyof typeof GoodCategory];
 
 // API错误类型
 export interface ApiError {

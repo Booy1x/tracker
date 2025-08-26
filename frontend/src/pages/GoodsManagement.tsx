@@ -53,8 +53,6 @@ export default function GoodsManagement() {
       purchaseDate:
         apiGood.purchase_date || new Date().toISOString().split('T')[0],
       expiryDate: apiGood.expiry_date,
-      quantity: apiGood.quantity,
-      unit: apiGood.unit,
       notes: apiGood.notes,
       category: apiGood.category,
       createdAt: apiGood.created_at || new Date().toISOString(),
@@ -92,8 +90,6 @@ export default function GoodsManagement() {
       const newApiGood = await goodsApi.createGood({
         name: newGoodData.name,
         category: newGoodData.category || '其他',
-        quantity: newGoodData.quantity,
-        unit: newGoodData.unit,
         purchase_date: newGoodData.purchaseDate,
         expiry_date: newGoodData.expiryDate,
         notes: newGoodData.notes,
@@ -222,19 +218,8 @@ export default function GoodsManagement() {
                 maxWidth: '100%',
                 margin: '0 auto',
                 padding: '0',
-                margin: '0 -8px',
               }}
             >
-              <Title
-                level={2}
-                style={{
-                  marginBottom: 24,
-                  fontSize: 'clamp(20px, 3vw, 28px)',
-                  textAlign: 'center',
-                }}
-              >
-                添加新物品
-              </Title>
               <AddGoodForm
                 onSubmit={handleAddGood}
                 onCancel={() => setShowAddForm(false)}

@@ -58,8 +58,6 @@ export interface Good {
   id?: string;
   name: string;
   category: string;
-  quantity: number;
-  unit: string;
   purchase_date: string;
   expiry_date: string;
   notes?: string;
@@ -88,7 +86,9 @@ export const goodsApi = {
   },
 
   // 创建新物品
-  createGood: async (good: Omit<Good, 'id' | 'created_at' | 'updated_at'>): Promise<Good> => {
+  createGood: async (
+    good: Omit<Good, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<Good> => {
     const response = await apiClient.post<ApiResponse<Good>>('/goods', good);
     if (response.data.success && response.data.data) {
       return response.data.data;
@@ -97,8 +97,14 @@ export const goodsApi = {
   },
 
   // 更新物品
-  updateGood: async (id: string, good: Partial<Omit<Good, 'id' | 'created_at' | 'updated_at'>>): Promise<Good> => {
-    const response = await apiClient.put<ApiResponse<Good>>(`/goods/${id}`, good);
+  updateGood: async (
+    id: string,
+    good: Partial<Omit<Good, 'id' | 'created_at' | 'updated_at'>>
+  ): Promise<Good> => {
+    const response = await apiClient.put<ApiResponse<Good>>(
+      `/goods/${id}`,
+      good
+    );
     if (response.data.success && response.data.data) {
       return response.data.data;
     }
@@ -115,7 +121,9 @@ export const goodsApi = {
 
   // 按分类筛选物品
   getGoodsByCategory: async (category: string): Promise<Good[]> => {
-    const response = await apiClient.get<ApiResponse<Good[]>>(`/goods/category/${category}`);
+    const response = await apiClient.get<ApiResponse<Good[]>>(
+      `/goods/category/${category}`
+    );
     if (response.data.success && response.data.data) {
       return response.data.data;
     }
@@ -124,7 +132,9 @@ export const goodsApi = {
 
   // 搜索物品
   searchGoods: async (query: string): Promise<Good[]> => {
-    const response = await apiClient.get<ApiResponse<Good[]>>(`/goods/search?q=${encodeURIComponent(query)}`);
+    const response = await apiClient.get<ApiResponse<Good[]>>(
+      `/goods/search?q=${encodeURIComponent(query)}`
+    );
     if (response.data.success && response.data.data) {
       return response.data.data;
     }
