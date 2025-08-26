@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { CreateGoodRequest } from '../types/good';
-import { COMMON_CATEGORIES, COMMON_UNITS } from '../types/good';
+import { COMMON_CATEGORIES } from '../types/good';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -30,11 +30,14 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
       .add(values.shelfLifeDays, 'days')
       .format('YYYY-MM-DD');
 
+    // 处理分类字段，确保是字符串
+    const category = Array.isArray(values.category) 
+      ? values.category[0] || '其他' 
+      : values.category || '其他';
+
     const submitData: CreateGoodRequest = {
       name: values.name,
-      category: values.category,
-      quantity: values.quantity,
-      unit: values.unit,
+      category: category,
       purchaseDate,
       expiryDate,
       notes: values.notes,
@@ -63,8 +66,6 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
         onFinish={handleFormSubmit}
         initialValues={{
           category: '其他',
-          unit: '个',
-          quantity: 1,
           shelfLifeDays: 7,
         }}
       >
@@ -94,37 +95,7 @@ export default function AddGoodForm({ onSubmit, onCancel }: AddGoodFormProps) {
           />
         </Form.Item>
 
-        <Space.Compact style={{ width: '100%' }}>
-          <Form.Item
-            label="数量"
-            name="quantity"
-            rules={[{ required: true, message: '请输入数量' }]}
-            style={{ width: '60%' }}
-          >
-            <Input
-              type="number"
-              min={0.1}
-              step={0.1}
-              placeholder="输入数量"
-              size="large"
-            />
-          </Form.Item>
 
-          <Form.Item
-            label="单位"
-            name="unit"
-            rules={[{ required: true, message: '请选择单位' }]}
-            style={{ width: '40%' }}
-          >
-            <Select placeholder="单位" size="large">
-              {COMMON_UNITS.map((unit) => (
-                <Select.Option key={unit} value={unit}>
-                  {unit}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Space.Compact>
 
         <Form.Item
           label="购买日期"

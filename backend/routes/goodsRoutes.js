@@ -109,15 +109,6 @@ router.post("/", async (req, res) => {
       });
     }
 
-    if (quantity !== undefined && quantity !== null) {
-      if (!Number.isInteger(quantity) || quantity < 0) {
-        return res.status(400).json({
-          success: false,
-          message: "数量必须是大于等于0的整数",
-        });
-      }
-    }
-
     // 验证日期格式
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (purchase_date && !dateRegex.test(purchase_date)) {
@@ -166,7 +157,6 @@ router.post("/", async (req, res) => {
       name: name.trim(),
       purchase_date: purchase_date || null,
       expiry_date: expiry_date || null,
-      quantity: quantity || 1,
       category: category ? category.trim() : null,
       notes: notes ? notes.trim() : null,
       created_at: new Date().toISOString(),

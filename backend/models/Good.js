@@ -5,8 +5,6 @@ class Good {
     this.name = data.name || "";
     this.purchaseDate = data.purchase_date || data.purchaseDate || new Date();
     this.expiryDate = data.expiry_date || data.expiryDate || new Date();
-    this.quantity = data.quantity || 1;
-    this.unit = data.unit || "个";
     this.notes = data.notes || "";
     this.imageUrl = data.image_url || data.imageUrl || "";
     this.category = data.category || "";
@@ -49,8 +47,6 @@ class Good {
       name: this.name,
       purchase_date: this.purchaseDate,
       expiry_date: this.expiryDate,
-      quantity: this.quantity,
-      unit: this.unit,
       notes: this.notes,
       image_url: this.imageUrl,
       category: this.category,
@@ -65,8 +61,6 @@ class Good {
       name: data.name,
       purchaseDate: new Date(data.purchase_date),
       expiryDate: new Date(data.expiry_date),
-      quantity: parseFloat(data.quantity),
-      unit: data.unit,
       notes: data.notes,
       imageUrl: data.image_url,
       category: data.category,
@@ -102,18 +96,6 @@ class Good {
       }
     }
 
-    if (!this.quantity || this.quantity <= 0) {
-      errors.push("数量必须大于0");
-    }
-
-    if (!this.unit || this.unit.trim().length === 0) {
-      errors.push("单位不能为空");
-    }
-
-    if (this.unit && this.unit.length > 50) {
-      errors.push("单位不能超过50个字符");
-    }
-
     if (this.notes && this.notes.length > 1000) {
       errors.push("备注不能超过1000个字符");
     }
@@ -139,8 +121,6 @@ class Good {
       name: this.name,
       purchaseDate: this.purchaseDate.toISOString().split("T")[0],
       expiryDate: this.expiryDate.toISOString().split("T")[0],
-      quantity: this.quantity,
-      unit: this.unit,
       notes: this.notes,
       imageUrl: this.imageUrl,
       category: this.category,

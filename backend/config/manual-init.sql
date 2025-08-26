@@ -10,16 +10,13 @@ CREATE TABLE IF NOT EXISTS goods (
   name VARCHAR(255) NOT NULL,
   purchase_date DATE NOT NULL,
   expiry_date DATE NOT NULL,
-  quantity DECIMAL(10,2) NOT NULL DEFAULT 1,
-  unit VARCHAR(50) NOT NULL DEFAULT '个',
   notes TEXT,
   image_url TEXT,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   category VARCHAR(100),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT check_dates CHECK (expiry_date >= purchase_date),
-  CONSTRAINT check_quantity CHECK (quantity > 0)
+  CONSTRAINT check_dates CHECK (expiry_date >= purchase_date)
 );
 
 -- 3. 创建更新时间触发器函数
@@ -65,8 +62,6 @@ SELECT
   name,
   purchase_date,
   expiry_date,
-  quantity,
-  unit,
   notes,
   image_url,
   category,
@@ -89,10 +84,10 @@ WHERE user_id = auth.uid();
 
 -- 11. 插入测试数据（使用事务和验证）
 BEGIN;
-INSERT INTO goods (name, purchase_date, expiry_date, quantity, unit, category, notes, user_id) VALUES
-('苹果', '2024-01-15', '2024-01-25', 5, '个', '水果', '红富士苹果', auth.uid()),
-('牛奶', '2024-01-10', '2024-01-20', 2, '升', '饮料', '全脂牛奶', auth.uid()),
-('面包', '2024-01-12', '2024-01-18', 1, '个', '主食', '全麦面包', auth.uid())
+INSERT INTO goods (name, purchase_date, expiry_date, category, notes, user_id) VALUES
+('苹果', '2024-01-15', '2024-01-25', '水果', '红富士苹果', auth.uid()),
+('牛奶', '2024-01-10', '2024-01-20', '饮料', '全脂牛奶', auth.uid()),
+('面包', '2024-01-12', '2024-01-18', '主食', '全麦面包', auth.uid())
 ON CONFLICT DO NOTHING;
 COMMIT;
 

@@ -5,8 +5,6 @@ export interface Good {
   name: string;
   purchaseDate: string; // YYYY-MM-DD
   expiryDate: string; // YYYY-MM-DD
-  quantity: number;
-  unit: string;
   notes?: string;
   imageUrl?: string;
   category?: string;
@@ -20,8 +18,6 @@ export interface CreateGoodRequest {
   name: string;
   purchaseDate: string;
   expiryDate: string;
-  quantity: number;
-  unit: string;
   notes?: string;
   imageUrl?: string;
   category?: string;
@@ -31,8 +27,6 @@ export interface UpdateGoodRequest {
   name?: string;
   purchaseDate?: string;
   expiryDate?: string;
-  quantity?: number;
-  unit?: string;
   notes?: string;
   imageUrl?: string;
   category?: string;
@@ -42,8 +36,6 @@ export interface GoodFormData {
   name: string;
   purchaseDate: string;
   expiryDate: string;
-  quantity: string;
-  unit: string;
   notes: string;
   imageUrl: string;
   category: string;
@@ -126,15 +118,7 @@ export const GOOD_VALIDATION_RULES = {
       return true;
     }
   },
-  quantity: {
-    required: '数量不能为空',
-    min: { value: 0.01, message: '数量必须大于0' },
-    max: { value: 10000, message: '数量不能超过10000' }
-  },
-  unit: {
-    required: '单位不能为空',
-    maxLength: { value: 50, message: '单位不能超过50个字符' }
-  },
+
   notes: {
     maxLength: { value: 1000, message: '备注不能超过1000个字符' }
   },
