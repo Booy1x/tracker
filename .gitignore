@@ -33,3 +33,4 @@ build/
 # OS generated files
 **/*.tmp
 **/*.temp
+.claude/settings.local.json
